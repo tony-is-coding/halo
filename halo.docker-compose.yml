@@ -1,0 +1,24 @@
+version: "3"
+services:
+  halo-blog:
+    container_name: halo-blog
+    image: halo-blog:latest
+    restart: on-failure
+    tty: true
+    stdin_open: true
+#    command: java -jar -server -Xms512m -Xmx512m -XX:MaxDirectMemorySize=64m -XX:CompressedClassSpaceSize=64m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/file_service/outOfMemoryError.hprof  /data/wwwRoot/halo.jar
+    command: java -Xms512m -Xmx512m -XX:MaxDirectMemorySize=64m -XX:CompressedClassSpaceSize=64m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/file_service/outOfMemoryError.hprof -Djava.security.egd=file:/dev/./urandom org.springframework.boot.loader.JarLauncher
+    ports:
+      - "15000:8090"
+    environment:
+      APP_ENV: "pd"
+      DEBUG: "true"
+
+    volumes:
+      - ~/data:/data
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1452
